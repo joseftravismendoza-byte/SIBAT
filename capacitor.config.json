@@ -1,0 +1,6 @@
+{
+  "appId": "ph.sibats.app",
+  "appName": "SiBATS",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#e8202a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SiBATS">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<title>SiBATS – Jeepney Companion</title>
+<style>
+:root{--bg:#dff0fb;--ink:#12263a;--sky:#3b8fe8;--sky2:#8cc8f5;--or:#f58a14;--or2:#ff6f00;--brown:#5a3412;--card:#fff;--mut:#6b7c8f;--grn:#d9f3dc;--grnt:#1f7a35;--red:#fde0dd;--redt:#b3382c;--line:#e6edf4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1b2b}}
+:root[data-theme="dark"]{--bg:#0e1b2b}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);font-family:"Nunito","Segoe UI",system-ui,sans-serif;color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.phone{width:100%;max-width:380px;height:760px;max-height:calc(100vh - 32px);background:#f6fafe;border-radius:38px;border:8px solid #fff;box-shadow:0 20px 50px rgba(20,60,110,.35);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.scr{flex:1;overflow-y:auto;scrollbar-width:none}.scr::-webkit-scrollbar{display:none}
+.hero{background:linear-gradient(#3b8fe8,#8cc8f5);color:#fff;padding:22px 20px 62px;position:relative;overflow:hidden}
+.hero h1{font-size:23px;font-weight:900}.hero p{opacity:.9;font-size:13px;margin-top:2px}
+.jeep{position:absolute;right:-6px;bottom:-4px;font-size:64px;opacity:.95}
+.search{margin:-30px 16px 0;background:#fff;border-radius:16px;padding:13px 14px;display:flex;gap:8px;box-shadow:0 6px 16px rgba(30,70,120,.15);position:relative;color:var(--mut);font-size:14px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:18px 14px 6px;text-align:center;font-size:11.5px;font-weight:700}
+.cats button{background:none;border:0;font:inherit;color:inherit;cursor:pointer}
+.ic{width:54px;height:54px;border-radius:50%;margin:0 auto 5px;display:grid;place-items:center;font-size:25px;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.12)}
+h2{font-size:15px;font-weight:800;padding:14px 16px 8px}
+.strip{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;scrollbar-width:none}
+.live{min-width:150px;background:#fff;border-radius:16px;padding:11px;box-shadow:0 3px 10px rgba(30,70,120,.08);cursor:pointer}
+.live b{display:block;font-size:13px}.live small{color:var(--mut);font-size:11px}
+.pill{display:inline-block;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:800;margin-top:6px}
+.g{background:var(--grn);color:var(--grnt)}.r{background:var(--red);color:var(--redt)}
+.row{display:flex;gap:12px;align-items:center;background:#fff;margin:0 16px 10px;border-radius:16px;padding:11px;box-shadow:0 3px 10px rgba(30,70,120,.08);cursor:pointer}
+.row .ic{margin:0;width:46px;height:46px;font-size:21px;flex:none}
+.row b{font-size:14px;display:block}.row small{color:var(--mut);font-size:12px}
+.row .fare{margin-left:auto;font-weight:900;color:var(--or2)}
+nav{display:flex;background:#fff;border-radius:22px;margin:0 12px 10px;padding:6px;box-shadow:0 4px 16px rgba(30,70,120,.15)}
+nav button{flex:1;border:0;background:none;border-radius:16px;padding:7px 0;font:inherit;font-size:11px;font-weight:700;color:var(--mut);cursor:pointer}
+nav button span{display:block;font-size:19px}
+nav button.on{background:#fff0dc;color:var(--or2)}
+.bar{display:flex;align-items:center;gap:8px;padding:14px 14px 8px}
+.back{width:34px;height:34px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:16px;cursor:pointer}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.chip{border:0;border-radius:99px;padding:7px 13px;font:inherit;font-size:12px;font-weight:800;background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.chip.on{background:var(--ink);color:#fff}
+.map{display:block;width:100%}
+.sheet{background:#fff;border-radius:22px 22px 0 0;margin-top:-18px;padding:16px;position:relative;min-height:240px}
+.banner{height:150px;background:linear-gradient(135deg,#f58a14,#ff6f00);display:flex;align-items:center;justify-content:center;font-size:76px;position:relative}
+.wait{background:var(--brown);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:8px}
+.tag{display:inline-block;background:#fff0dc;color:var(--brown);border-radius:99px;padding:3px 10px;font-size:11.5px;font-weight:800}
+.alert{display:flex;align-items:center;gap:10px;background:#f3f6f9;border-radius:14px;padding:11px;margin:12px 0}
+.alert div{flex:1;font-size:12px;color:var(--mut)}.alert b{display:block;color:var(--ink);font-size:13px}
+.sw{width:46px;height:26px;border-radius:99px;background:#c5d0db;border:0;position:relative;cursor:pointer;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:#2fb44f}.sw.on::after{left:23px}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.kv span{color:var(--mut)}
+.stops{margin:8px 0 12px;padding-left:4px}
+.stop{display:flex;gap:10px;font-size:13px;padding:4px 0;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--sky);flex:none;box-shadow:0 0 0 3px #d4e8fb}
+.stop.end .dot{background:var(--or)}
+.cta{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;border:0;border-radius:99px;background:linear-gradient(90deg,#f58a14,#ff6f00);color:#fff;font:inherit;font-weight:800;font-size:15px;padding:13px;cursor:pointer}
+.btn.sm{flex:none;width:46px;background:#fff0dc;color:var(--or2)}
+.navtop{position:absolute;left:14px;right:14px;top:62px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 16px rgba(0,0,0,.18);display:flex;align-items:center;gap:10px}
+.navtop b{font-size:18px}.navtop small{display:block;color:var(--mut);font-size:12px}
+.navtop i{margin-left:auto;width:38px;height:38px;border-radius:50%;background:var(--brown);color:#fff;display:grid;place-items:center;font-style:normal}
+.navfoot{position:absolute;left:0;right:0;bottom:0;background:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.navfoot .btn{flex:none;padding:12px 22px;font-size:14px}
+.recap{background:linear-gradient(#3b8fe8,#8cc8f5);padding:20px 16px;min-height:100%}
+.recap h1{color:#fff;font-size:22px;font-weight:900;text-align:center;margin-bottom:12px}
+.rc{background:#fff;border-radius:22px;padding:18px 14px;text-align:center}
+.rc .av{font-size:44px}.rc h3{font-size:17px;font-weight:900}.rc p{font-size:12px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;text-align:left}
+.grid div{border:1px solid var(--line);border-radius:14px;padding:10px;font-size:11.5px;color:var(--mut)}.grid b{display:block;font-size:15px;color:var(--ink)}
+.mem{background:linear-gradient(135deg,#f58a14,#ff6f00);color:#fff;border-radius:16px;padding:14px;text-align:left}
+.mem b{font-size:16px;display:block;margin:4px 0}.mem small{opacity:.9}
+.share{display:flex;justify-content:center;gap:18px;margin-top:14px;font-size:11px;color:#fff;font-weight:700}
+.share span{display:block;font-size:24px;background:#fff;width:46px;height:46px;border-radius:50%;line-height:46px;margin-bottom:3px}
+.prof{padding:6px 16px}
+.toast{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:12.5px;font-weight:700;padding:9px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap}
+.toast.show{opacity:1}
+button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.scr>*{animation:in .4s ease both}.scr>*:nth-child(2){animation-delay:.06s}.scr>*:nth-child(3){animation-delay:.12s}.scr>*:nth-child(4){animation-delay:.18s}
+@keyframes in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}65%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.cats .ic,.map>circle,.map>text{transform-box:fill-box;transform-origin:center;animation:pop .5s both}
+@keyframes pulse{from{transform:scale(1);opacity:.6}to{transform:scale(3.4);opacity:0}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 1.6s ease-out infinite}
+@keyframes dr{to{stroke-dashoffset:0}}.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 1.8s .3s ease forwards}
+@keyframes mr{to{stroke-dashoffset:-12}}.march{animation:mr .8s linear infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}.jeep{animation:bob 2.4s ease-in-out infinite}
+@keyframes cl{to{left:110%}}.hero::before{content:'☁️';position:absolute;top:12px;left:-40px;font-size:34px;opacity:.8;animation:cl 16s linear infinite}
+.btn,.row,.live,.chip,.cats button{transition:transform .15s}.btn:active,.row:active,.live:active,.chip:active,.cats button:active{transform:scale(.95)}
+@keyframes fall{to{transform:translateY(800px) rotate(540deg)}}
+.conf{position:absolute;top:-14px;width:8px;height:12px;border-radius:2px;z-index:5;pointer-events:none;animation:fall 2.6s linear both}
+.si{border:0;outline:0;font:inherit;flex:1;min-width:0;background:none;color:var(--ink)}.empty{text-align:center;color:var(--mut);padding:18px;font-size:13px}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}.draw{stroke-dashoffset:0!important}}
+/* Jeepney palette: signal red, sun yellow, royal blue, leaf green, ink purple */
+:root{--bg:#ffe08a;--ink:#1a1230;--sky:#1b3fa8;--or:#ffc712;--or2:#e8202a;--brown:#1a1230;--mut:#5d5670;--line:#f1e3b8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1030}}
+:root[data-theme="dark"]{--bg:#1b1030}
+body{background-image:radial-gradient(rgba(232,32,42,.22) 2px,transparent 2px);background-size:22px 22px}
+.phone{background:#fff8e1;border-color:#1a1230;box-shadow:0 0 0 4px #ffc712,0 22px 50px rgba(26,18,48,.45)}
+.hero{background:linear-gradient(135deg,#d9141f,#ff5a1f)}
+.hero::after,.banner::after{content:'';position:absolute;left:0;right:0;bottom:0;height:10px;background:repeating-linear-gradient(90deg,#1b3fa8 0 14px,#ffc712 14px 28px,#1faa59 28px 42px,#e8202a 42px 56px)}
+.search,.live,.row{border:2px solid #1a1230;box-shadow:3px 3px 0 #1a1230}
+.search{color:var(--ink)}
+.cats button:nth-child(1) .ic{background:#ffc712!important}.cats button:nth-child(2) .ic{background:#e8202a!important}.cats button:nth-child(3) .ic{background:#1faa59!important}.cats button:nth-child(4) .ic{background:#1b3fa8!important}
+.cats .ic{border-color:#1a1230}
+.row .ic{background:#ffe27a!important;border-color:#1a1230}
+.btn{background:linear-gradient(90deg,#e8202a,#ff5a1f);box-shadow:0 3px 0 #8f0f18}
+.btn.sm{background:#fff3c4;color:#e8202a;box-shadow:0 3px 0 #d9b24a}
+nav{border:2px solid #1a1230}nav button.on{background:#ffe27a;color:#e8202a}
+.tag{background:#ffe27a;color:#1a1230}
+.chip{border:2px solid #1a1230;box-shadow:none}.chip.on{background:#e8202a;color:#fff}
+.banner{background:linear-gradient(135deg,#1b3fa8,#e8202a)}
+.wait{background:#1a1230;color:#ffc712}
+.dot{background:#1b3fa8;box-shadow:0 0 0 3px #c9d6ff}.stop.end .dot{background:#e8202a;box-shadow:0 0 0 3px #ffd0d3}
+.navtop,.navfoot{border:2px solid #1a1230}.navtop i{background:#1b3fa8}
+.recap{background:linear-gradient(#1b3fa8,#e8202a)}
+.mem{background:linear-gradient(135deg,#ffc712,#ff7a00);color:#1a1230;border:2px solid #1a1230}
+.toast{background:#e8202a}
+.map>rect:first-child{fill:#25b866}.map>path:not(#rp){fill:#2aa8ff}
+.map>g:first-of-type{stroke:#fff3b0}.map>g:nth-of-type(2){fill:#ffb703}
+.map>circle{fill:#fffbe6;stroke:#e8202a}
+.map #rp.draw{stroke:#e8202a}.map #rp.march{stroke:#1b3fa8}
+.authc{margin:-44px 16px 16px;background:#fff;border:2px solid #1a1230;border-radius:20px;box-shadow:4px 4px 0 #1a1230;padding:14px;position:relative}
+.seg{display:flex;background:#fff3c4;border-radius:99px;padding:4px;margin-bottom:6px}
+.seg button{flex:1;border:0;background:none;border-radius:99px;padding:9px;font:inherit;font-weight:800;font-size:13px;color:var(--mut);cursor:pointer}
+.seg button.on{background:#e8202a;color:#fff}
+.lb{display:block;font-size:12px;font-weight:800;margin:10px 0 4px}
+.in{width:100%;border:2px solid #1a1230;border-radius:12px;padding:11px 12px;font:inherit;font-size:14px;background:#fffdf5;color:var(--ink)}
+.in:focus{outline:3px solid #ffc712;outline-offset:1px}
+.err{min-height:18px;color:#b3382c;font-size:12.5px;font-weight:700;margin:10px 0 8px}
+.lnk{display:block;margin:10px auto 0;border:0;background:none;font:inherit;font-size:12.5px;font-weight:800;color:#1b3fa8;cursor:pointer;text-decoration:underline}
+.note{font-size:11px;color:var(--mut);text-align:center;padding:0 20px 20px}
+@media (max-width:520px),(display-mode:standalone){body{padding:0;display:block;background-image:none}.phone{max-width:none;width:100%;height:100vh;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="scr" id="scr"></div>
+  <nav id="nav"></nav>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+var R=[
+{id:0,n:"Grand Terminal – Port",f:"Batangas Grand Terminal",t:"Batangas Port",fare:13,m:18,fr:"Every 5 min",ic:"⚓",c:"#d4e8fb",stops:["Batangas Grand Terminal","Kumintang Ibaba","Pallocan West","Batangas Port"]},
+{id:1,n:"Alangilan – Poblacion",f:"Alangilan",t:"City Hall",fare:15,m:25,fr:"Every 8 min",ic:"🎓",c:"#e6f6e1",stops:["Alangilan","Batangas State U","Kumintang Ilaya","City Hall"]},
+{id:2,n:"Grand Terminal – Bauan",f:"Batangas Grand Terminal",t:"Bauan Plaza",fare:22,m:35,fr:"Every 10 min",ic:"🏖️",c:"#fff0dc",stops:["Batangas Grand Terminal","Pallocan","San Pascual Jct.","Bauan Plaza"]}
+];
+var N=[{n:"Grand Terminal",s:185,d:"120 m"},{n:"SM City Batangas",s:720,d:"450 m"},{n:"Kumintang Stop",s:365,d:"300 m"}];var K=[3.1,4.2,9.6];
+var st={tab:"home",view:"home",r:0,alert:true,disc:"Regular",f:"All",trips:[{r:1,k:.8},{r:1,k:.8},{r:0,k:1}]};function dk(){return {Regular:1,Student:.8,Senior:.8,PWD:.8}[st.disc]}function stats(){var s={n:st.trips.length,fare:0,km:0,mn:0,save:0};st.trips.forEach(function(t){s.fare+=R[t.r].fare*t.k;s.save+=R[t.r].fare*(1-t.k);s.km+=K[t.r];s.mn+=R[t.r].m});return s}
+var $=function(i){return document.getElementById(i)};
+function toast(m){var t=$("toast");t.textContent=m;t.className="toast show";clearTimeout(toast.h);toast.h=setTimeout(function(){t.className="toast"},1800)}
+function peso(r){var d={Regular:1,Student:.8,Senior:.8,PWD:.8}[st.disc];return "₱"+(r.fare*d).toFixed(0)}
+function mapSvg(h,route,hi){
+var path="M40 250 C90 230 110 170 170 160 S250 120 300 60";
+return '<svg class="map" viewBox="0 0 360 '+h+'" role="img" aria-label="Map of Batangas City routes"><rect width="360" height="'+h+'" fill="#7ab55c"/>'+
+'<path d="M0 90 Q90 60 150 110 T360 150 V190 Q250 170 150 150 T0 130Z" fill="#8fd0f0"/>'+
+'<g stroke="#f3dfae" stroke-width="12" fill="none" stroke-linecap="round"><path d="M0 230 L360 200"/><path d="M110 0 L150 '+h+'"/><path d="M250 0 L230 '+h+'"/><path d="M0 40 L360 80"/></g>'+
+'<g fill="#5f9c44"><rect x="20" y="170" width="60" height="40" rx="10"/><rect x="270" y="210" width="70" height="40" rx="10"/><rect x="170" y="20" width="50" height="40" rx="10"/></g>'+
+(route?'<path id="rp" class="'+(hi?"march":"draw")+'" d="'+path+'" stroke="'+(hi?"#c8571a":"#3b8fe8")+'" stroke-width="'+(hi?6:5)+'" fill="none" stroke-linecap="round" '+(hi?'stroke-dasharray="1 11"':'pathLength="1"')+'/>'+(hi?'':'<g><animateMotion dur="9s" repeatCount="indefinite" path="'+path+'"/><text y="6" text-anchor="middle" font-size="20">🚌</text></g>'):'')+
+[[40,250,"🚏","stop"],[170,160,"🚌","term"],[300,60,"⚓","term"],[110,200,"🚏","stop"],[250,175,"🏫","school"]].filter(function(p){return st.f=="All"||p[3]==st.f}).map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="16" fill="#fff" stroke="#f58a14" stroke-width="3"/><text x="'+p[0]+'" y="'+(p[1]+6)+'" text-anchor="middle" font-size="16">'+p[2]+'</text>'}).join("")+
+'<g id="me"><circle class="pulse" cx="40" cy="250" r="8" fill="#2f7be6"/><circle cx="40" cy="250" r="7" fill="#2f7be6" stroke="#fff" stroke-width="3"/></g></svg>'}
+function home(){
+return '<div class="hero"><h1>Magandang umaga'+(st.user?', '+esc(st.user.name.split(' ')[0]):'')+'!</h1><p>Where are you headed today?</p><div class="jeep">🚌</div></div>'+
+'<div class="search">🔍<input class="si" id="q" placeholder="Search a destination or terminal" autocomplete="off" aria-label="Search"></div><div id="res"></div><div id="hb">'+
+'<div class="cats"><button data-go="list"><div class="ic" style="background:#d4e8fb">🛣️</div>Routes</button><button data-go="list"><div class="ic" style="background:#fff0dc">💰</div>Fares</button><button data-tab="map"><div class="ic" style="background:#e6f6e1">🏁</div>Terminals</button><button data-tab="map"><div class="ic" style="background:#fde0dd">🚏</div>Stops</button></div>'+
+'<h2>Nearby terminals</h2><div class="strip">'+N.map(function(x,i){return '<div class="live" data-tab="map"><b>'+x.n+'</b><small>'+x.d+' away</small><br><span class="pill '+(x.s<300?"g":"r")+'" data-cd="'+i+'" data-p="next jeep ">next jeep '+fmt(x.s)+'</span></div>'}).join("")+'</div>'+
+'<h2>Popular routes</h2>'+R.map(rowH).join("")+'<div style="height:8px"></div></div>'}
+function rowH(r){return '<div class="row" data-r="'+r.id+'"><div class="ic" style="background:'+r.c+'">'+r.ic+'</div><div><b>'+r.n+'</b><small>'+r.fr+' • '+r.m+' min</small></div><div class="fare">'+peso(r)+'</div></div>'}
+function list(){return '<div class="bar"><button class="back" data-tab="home" aria-label="Back">‹</button><b>All routes</b></div><div style="height:6px"></div>'+R.map(rowH).join("")}
+function map(){
+return '<div style="position:relative">'+mapSvg(300,1,0)+'<div style="position:absolute;top:12px;left:12px;right:12px">'+chipsH()+'</div></div>'+
+'<div class="sheet"><b style="font-size:14px">Nearby terminals</b><div style="height:8px"></div>'+N.map(function(x,i){return '<div class="row" style="margin:0 0 8px;box-shadow:none;border:1px solid var(--line)" data-r="'+(i%3)+'"><div class="ic" style="background:#fff0dc">🚏</div><div><b>'+x.n+'</b><small>'+x.d+' • '+(i+4)+' routes</small></div><span class="pill '+(x.s<300?"g":"r")+'" data-cd="'+i+'" style="margin:0 0 0 auto">'+fmt(x.s)+'</span></div>'}).join("")+'</div>'}
+function detail(){
+var r=R[st.r];
+return '<div class="banner"><button class="back" data-tab="home" aria-label="Back" style="position:absolute;left:14px;top:14px">‹</button>'+r.ic+'🚌</div><div class="wait"><span data-cd="'+st.r+'" data-p="Next jeep in ">Next jeep in '+fmt(N[st.r].s)+'</span> | '+r.fr+'</div>'+
+'<div class="sheet" style="margin-top:0;border-radius:0"><b style="font-size:18px">'+r.n+'</b><br><span class="tag">Jeepney • '+r.m+' min</span>'+
+'<div class="alert"><span style="font-size:22px">🔔</span><div><b>Smart alerts</b>Notify me when the jeep is 1 min away</div><button class="sw '+(st.alert?"on":"")+'" id="sw" role="switch" aria-checked="'+st.alert+'" aria-label="Smart alerts"></button></div>'+
+'<b style="font-size:14px">Fare and details</b><div class="kv"><span>Fare type</span><b>'+st.disc+'</b></div><div class="kv"><span>Your fare</span><b style="color:var(--or2)">'+peso(r)+'</b></div><div class="kv"><span>Boarding point</span><b>'+r.f+'</b></div>'+
+'<b style="font-size:14px;display:block;margin-top:12px">Designated stops</b><div class="stops">'+r.stops.map(function(s,i){return '<div class="stop'+(i==r.stops.length-1?" end":"")+'"><i class="dot"></i>'+s+'</div>'}).join("")+'</div>'+
+'<div class="cta"><button class="btn" id="plan">Add to trip</button><button class="btn sm" data-go="nav" aria-label="Navigate">➤</button></div></div>'}
+function nav(){
+return '<div style="position:relative;height:100%;background:#7ab55c">'+mapSvg(760,1,1).replace('class="map"','class="map" style="height:100%" preserveAspectRatio="xMidYMid slice"')+
+'<div class="navtop"><div><b id="dm">120 m</b><small id="dt">Follow the dotted path to the boarding point</small></div><i>↱</i></div>'+
+'<div class="navfoot"><div style="font-size:26px">🚏</div><div><b style="font-size:14px">To '+R[st.r].f+'</b><br><small style="color:var(--mut)">120 m • 2 min walk</small></div><button class="btn" id="start">Start</button></div></div>'}
+function recap(){var S=stats();
+return '<div class="recap"><h1>SiBATS trip recap</h1><div class="rc"><div class="av">🧑‍🎓</div><h3>What a commute!</h3><p>Here’s your week on the jeep.</p>'+
+'<div class="grid"><div><b data-up="'+S.n+'" data-suf=" rides">0</b>Completed</div><div><b data-up="'+S.fare+'" data-pre="₱">0</b>Total fare</div><div><b data-up="'+S.km.toFixed(1)+'" data-dec="1" data-suf=" km">0</b>Traveled</div><div><b data-up="'+S.mn+'" data-suf=" min">0</b>On the road</div></div>'+
+'<div class="mem"><small>Week of 16 Nov 2026</small><b>Your SiBATS week</b><small>'+S.n+' rides • '+S.km.toFixed(1)+' km • ₱'+S.save.toFixed(0)+' saved with discounts</small></div></div>'+
+'<div class="share"><div><span>📷</span>Photos</div><div><span>💬</span>Messenger</div><div><span>⋯</span>More</div></div></div>'}
+function prof(){
+var o=["Regular","Student","Senior","PWD"];
+return '<div class="hero" style="padding-bottom:26px"><h1>Your profile</h1><p>Pick your fare type. Discounted fares update automatically.</p></div><div class="prof">'+acct()+'<h2 style="padding-left:0">Fare type</h2><div class="chips" style="flex-wrap:wrap">'+o.map(function(x){return '<button class="chip'+(x==st.disc?" on":"")+'" data-d="'+x+'">'+x+'</button>'}).join("")+'</div><p style="font-size:12px;color:var(--mut);margin-top:14px">Fares shown are sample values for this prototype. In SiBATS, authorized staff update verified fares from the admin database.</p></div>'}
+function draw(){
+var v=(st.user||st.guest)?st.view:"auth",h="";
+if(v=="auth")h=auth();else if(v=="home")h=home();else if(v=="list")h=list();else if(v=="map")h=map();else if(v=="detail")h=detail();else if(v=="nav")h=nav();else if(v=="recap")h=recap();else h=prof();
+$("scr").innerHTML=h;$("scr").scrollTop=0;countUp();$("nav").style.display=v=="auth"?"none":"";if(st.view=="recap")confetti();
+var T=[["home","🏠","Home"],["map","🗺️","Maps"],["recap","🧾","Trips"],["prof","👤","Profile"]];
+$("nav").innerHTML=T.map(function(t){return '<button data-tab="'+t[0]+'" class="'+(st.tab==t[0]?"on":"")+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join("");
+}
+function go(v,tab){st.walk=st.arr=0;st.view=v;if(tab)st.tab=tab;draw()}
+$("phone").addEventListener("click",function(e){
+var el=e.target.closest("[data-tab],[data-go],[data-r],[data-d],[data-f],[data-m],#sw,#plan,#start,#out,#guest,#sp");if(!el)return;
+if(el.id=="sw"){st.alert=!st.alert;draw();toast(st.alert?"Alerts on":"Alerts off");return}
+if(el.id=="plan"){st.trips.push({r:st.r,k:dk()});toast("Added to your trips ("+st.trips.length+")");return}
+if(el.id=="start"){if(st.arr){st.trips.push({r:st.r,k:dk()});toast("Ride logged to your trips");go("recap","recap");return}if(!st.walk){st.walk=1;el.textContent="Walking…";startNav()}return}
+if(el.dataset.f){st.f=el.dataset.f;draw();return}
+if(el.dataset.m){st.mode=el.dataset.m;draw();return}
+if(el.id=="guest"){st.guest=1;go("home","home");return}
+if(el.id=="out"){st.user=null;st.guest=0;st.mode="login";lsSet("sibats_session",null);go("home","home");return}
+if(el.id=="sp"){var ty=$("pw").type=="password"?"text":"password";$("pw").type=ty;if($("pw2"))$("pw2").type=ty;el.textContent=ty=="text"?"Hide password":"Show password";return}
+if(el.dataset.d){st.disc=el.dataset.d;if(st.user){USERS[st.user.email].d=st.disc;lsSet("sibats_users",USERS)}draw();return}
+if(el.dataset.r!==undefined){st.r=+el.dataset.r;go("detail");return}
+if(el.dataset.go){go(el.dataset.go);return}
+if(el.dataset.tab){go(el.dataset.tab,el.dataset.tab)}
+});
+function chipsH(){return '<div class="chips">'+[['All','All'],['term','Terminals'],['stop','Stops'],['school','Schools']].map(function(c){return '<button class="chip'+(st.f==c[0]?' on':'')+'" data-f="'+c[0]+'">'+c[1]+'</button>'}).join('')+'</div>'}
+function fmt(s){return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+function countUp(){document.querySelectorAll('[data-up]').forEach(function(el){var v=+el.dataset.up,dc=+el.dataset.dec||0,pre=el.dataset.pre||'',suf=el.dataset.suf||'',t0=0;function f(t){if(!t0)t0=t;var k=Math.min((t-t0)/900,1);k=1-Math.pow(1-k,3);el.textContent=pre+(v*k).toFixed(dc)+suf;if(k<1)requestAnimationFrame(f)}requestAnimationFrame(f)})}
+function confetti(){if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;var p=$('phone'),c=['#f58a14','#3b8fe8','#2fb44f','#fdd835','#ec4899'];for(var i=0;i<26;i++){var d=document.createElement('i');d.className='conf';d.style.cssText='left:'+Math.random()*100+'%;background:'+c[i%5]+';animation-delay:'+Math.random()*.8+'s';p.appendChild(d);setTimeout(function(x){x.remove()},3600,d)}}
+function startNav(){var p=$('rp'),m=$('me'),L=p.getTotalLength(),t0=0;function f(t){if(st.view!=='nav')return;if(!t0)t0=t;var k=Math.min((t-t0)/9000,1),q=p.getPointAtLength(k*L),d=Math.round(120*(1-k));m.setAttribute('transform','translate('+(q.x-40)+' '+(q.y-250)+')');$('dm').textContent=d+' m';$('dt').textContent=d?'Keep following the dotted path':'You have arrived';if(k<1)requestAnimationFrame(f);else{st.arr=1;$('start').textContent='Board jeep';toast('You have arrived')}}requestAnimationFrame(f)}
+$('phone').addEventListener('input',function(e){if(e.target.id!=='q')return;var q=e.target.value.trim().toLowerCase(),o='';if(q){var h=R.filter(function(r){return (r.n+' '+r.stops.join(' ')).toLowerCase().indexOf(q)>-1});o=h.length?h.map(rowH).join(''):'<div class=\'empty\'>No route found yet. Try Bauan, Port, or Alangilan.</div>'}$('res').innerHTML=q?'<div style=\'height:10px\'></div>'+o:'';$('hb').style.display=q?'none':''});
+setInterval(function(){N.forEach(function(x){x.s--;if(x.s<0)x.s=240+Math.floor(Math.random()*300)});document.querySelectorAll('[data-cd]').forEach(function(el){var s=N[el.dataset.cd].s;el.textContent=(el.dataset.p||'')+fmt(s);if(el.classList.contains('pill')){el.classList.toggle('g',s<300);el.classList.toggle('r',s>=300)}});if(st.view=='detail'&&st.alert&&N[st.r].s==60)toast('🔔 Your jeep is 1 minute away')},1000);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function hash(e,p){var b=new TextEncoder().encode('sibats:'+e+':'+p);if(window.crypto&&crypto.subtle)return crypto.subtle.digest('SHA-256',b).then(function(d){return Array.from(new Uint8Array(d)).map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('')});return Promise.resolve(btoa(unescape(encodeURIComponent(e+':'+p))))}
+var USERS=lsGet('sibats_users')||{};st.mode='login';
+function field(id,l,t,ac){return '<label class="lb" for="'+id+'">'+l+'</label><input class="in" id="'+id+'" type="'+t+'" autocomplete="'+ac+'">'}
+function auth(){var g=st.mode=='reg';return '<div class="hero" style="padding-bottom:70px"><h1>'+(g?'Create your account':'Welcome back!')+'</h1><p>'+(g?'Save your fare type and trips.':'Log in to see routes, fares, and your trips.')+'</p><div class="jeep">🚌</div></div><div class="authc"><div class="seg"><button type="button" data-m="login" class="'+(g?'':'on')+'">Log in</button><button type="button" data-m="reg" class="'+(g?'on':'')+'">Register</button></div><form id="af" novalidate>'+(g?field('name','Full name','text','name'):'')+field('email','Email','email','email')+field('pw','Password','password',g?'new-password':'current-password')+(g?field('pw2','Confirm password','password','new-password')+'<label class="lb" for="fare">Fare type</label><select id="fare" class="in">'+['Regular','Student','Senior','PWD'].map(function(o){return '<option>'+o+'</option>'}).join('')+'</select>':'')+'<button type="button" class="lnk" id="sp" style="margin:8px 0 0">Show password</button><div class="err" id="err" role="alert"></div><button class="btn" type="submit" style="width:100%">'+(g?'Create account':'Log in')+'</button></form><button type="button" class="lnk" id="guest">Continue as guest</button></div><p class="note">Prototype only: accounts are saved in this browser. A real build needs a server database and securely hashed passwords.</p>'}
+function acct(){return st.user?'<div class="row" style="margin:0 0 8px;cursor:default"><div class="ic">🧑</div><div><b>'+esc(st.user.name)+'</b><small>'+esc(st.user.email)+'</small></div></div><button class="btn" id="out" style="width:100%">Log out</button>':'<p style="font-size:13px;color:var(--mut);margin-bottom:8px">You are browsing as a guest.</p><button class="btn" id="out" style="width:100%">Log in or register</button>'}
+function signIn(em){var u=USERS[em];st.user={email:em,name:u.name};st.disc=u.d||'Regular';lsSet('sibats_session',em);toast('Welcome, '+u.name.split(' ')[0]+'!');go('home','home')}
+$('phone').addEventListener('submit',function(e){e.preventDefault();var g=st.mode=='reg',em=$('email').value.trim().toLowerCase(),pw=$('pw').value,er=$('err');function fail(m){er.textContent=m}
+if(!/^\S+@\S+\.\S+$/.test(em))return fail('Enter a valid email address.');
+if(g){var nm=$('name').value.trim();if(nm.length<2)return fail('Enter your full name.');if(pw.length<8)return fail('Use at least 8 characters for your password.');if(pw!==$('pw2').value)return fail('Passwords do not match.');if(USERS[em])return fail('That email is already registered. Try logging in.');hash(em,pw).then(function(h){USERS[em]={name:nm,h:h,d:$('fare').value};lsSet('sibats_users',USERS);signIn(em)})}
+else{if(!pw)return fail('Enter your password.');hash(em,pw).then(function(h){if(!USERS[em]||USERS[em].h!==h)return fail('Email or password is incorrect.');signIn(em)})}});
+var s0=lsGet('sibats_session');if(s0&&USERS[s0]){st.user={email:s0,name:USERS[s0].name};st.disc=USERS[s0].d||'Regular'}
+draw();
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){navigator.serviceWorker.register('sw.js').catch(function(){})}
+</script>
+</body>
+</html>
